@@ -19,10 +19,9 @@ import os
 import re
 import sys
 from pathlib import Path
-
-import requests
 from packaging.version import Version
 from packaging.version import parse as parse_version
+from security import safe_requests
 
 
 def get_python_version(file_path: str) -> str:
@@ -35,7 +34,7 @@ def get_python_version(file_path: str) -> str:
 
 def get_pypi_version(package_name: str) -> str:
     """Get latest version of Python package from PyPI."""
-    response = requests.get(f"https://pypi.org/pypi/{package_name}/json")
+    response = safe_requests.get(f"https://pypi.org/pypi/{package_name}/json")
     version = response.json()['info']['version']
     return version.strip()
 
@@ -49,7 +48,7 @@ def get_js_version(file_path: str) -> str:
 
 def get_npm_version(package_name: str) -> str:
     """Get latest version of JavaScript package from npm."""
-    response = requests.get(f"https://registry.npmjs.org/{package_name}/latest")
+    response = safe_requests.get(f"https://registry.npmjs.org/{package_name}/latest")
     version = response.json()['version']
     return version.strip()
 
