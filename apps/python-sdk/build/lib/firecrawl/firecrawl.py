@@ -74,7 +74,7 @@ class FirecrawlApp:
             f'{self.api_url}/v0/scrape',
             headers=headers,
             json=scrape_params,
-        )
+        timeout=60)
         if response.status_code == 200:
             response = response.json()
             if response['success'] and 'data' in response:
@@ -111,8 +111,8 @@ class FirecrawlApp:
         response = requests.post(
             f'{self.api_url}/v0/search',
             headers=headers,
-            json=json_data
-        )
+            json=json_data, 
+        timeout=60)
         if response.status_code == 200:
             response = response.json()
             
@@ -218,7 +218,7 @@ class FirecrawlApp:
             requests.RequestException: If the request fails after the specified retries.
         """
         for attempt in range(retries):
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(url, headers=headers, json=data, timeout=60)
             if response.status_code == 502:
                 time.sleep(backoff_factor * (2 ** attempt))
             else:
@@ -242,7 +242,7 @@ class FirecrawlApp:
             requests.RequestException: If the request fails after the specified retries.
         """
         for attempt in range(retries):
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=60)
             if response.status_code == 502:
                 time.sleep(backoff_factor * (2 ** attempt))
             else:
